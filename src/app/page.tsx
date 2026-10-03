@@ -37,6 +37,8 @@ export default function Home() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isWaiterCardOpen, setIsWaiterCardOpen] = useState(false);
 
+  const [currentDishImage, setCurrentDishImage] = useState("/dishes/pad_thai.jpg");
+
   // Initial audit run on startup
   useEffect(() => {
     const firstSample = SAMPLE_FOOD_DATABASE[0];
@@ -48,15 +50,18 @@ export default function Home() {
         DEFAULT_FRIEND_ALEX
       );
       setCurrentAudit(initial);
+      setCurrentDishImage(firstSample.image);
     }
   }, []);
 
   const handleAuditFood = (
     foodName: string,
     category: "restaurant_dish" | "packaged_food" | "custom_input",
-    rawIngredients: string
+    rawIngredients: string,
+    image?: string
   ) => {
     setIsAuditing(true);
+    if (image) setCurrentDishImage(image);
     setTimeout(() => {
       const result = auditFoodWithTabPFN(foodName, category, rawIngredients, friend);
       setCurrentAudit(result);
@@ -132,6 +137,7 @@ export default function Home() {
                 <AuditDashboard
                   audit={currentAudit}
                   friend={friend}
+                  dishImage={currentDishImage}
                   onOpenWaiterCard={() => setIsWaiterCardOpen(true)}
                   onScanAnother={() => {
                     window.scrollTo({ top: 0, behavior: "smooth" });

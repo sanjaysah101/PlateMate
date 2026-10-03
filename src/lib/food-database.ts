@@ -7,6 +7,10 @@ export interface SampleFoodItem {
   rawIngredients: string;
   expectedVerdictForAlex: "SAFE" | "CAUTION" | "DANGEROUS";
   keyTakeaway: string;
+  image: string;
+  cuisine: string;
+  prepTime: string;
+  riskHighlights: string[];
 }
 
 export const SAMPLE_FOOD_DATABASE: SampleFoodItem[] = [
@@ -16,12 +20,16 @@ export const SAMPLE_FOOD_DATABASE: SampleFoodItem[] = [
     cuisineOrBrand: "Bangkok Bistro",
     category: "restaurant_dish",
     description:
-      "Stir-fried rice noodles with chicken, egg, crushed peanuts, bean sprouts, tamarind sauce, and soy sauce.",
+      "Wok-fired rice noodles with tender chicken, farm egg, crushed roasted peanuts, tamarind glaze, and brewed soy sauce.",
     rawIngredients:
       "Rice noodles, chicken breast, eggs, crushed peanuts, peanut oil, fish sauce, tamarind paste, regular brewed soy sauce (contains wheat), palm sugar, bean sprouts, garlic chives.",
     expectedVerdictForAlex: "DANGEROUS",
     keyTakeaway:
-      "Contains both direct crushed peanuts/peanut oil (anaphylaxis danger) AND wheat-brewed soy sauce (Celiac reaction).",
+      "Contains direct crushed peanuts/peanut oil (anaphylaxis shock risk) AND wheat-brewed soy sauce (severe Celiac reaction).",
+    image: "/dishes/pad_thai.jpg",
+    cuisine: "Thai Wok",
+    prepTime: "12 min",
+    riskHighlights: ["Peanut Oil & Crushed Nuts", "Wheat-Brewed Soy Sauce"],
   },
   {
     id: "artisan-sourdough-bruschetta",
@@ -29,37 +37,33 @@ export const SAMPLE_FOOD_DATABASE: SampleFoodItem[] = [
     cuisineOrBrand: "Trattoria Bella",
     category: "restaurant_dish",
     description:
-      "Grilled sourdough bread topped with ripe heirloom tomatoes, basil, extra virgin olive oil, and aged balsamic glaze.",
+      "Chargrilled artisan sourdough bread topped with sweet heirloom tomatoes, fresh basil ribbons, and aged balsamic reduction glaze.",
     rawIngredients:
       "Sourdough wheat bread, heirloom tomatoes, fresh basil, extra virgin olive oil, garlic, sea salt, aged balsamic glaze (grape must, wine vinegar, modified wheat starch).",
     expectedVerdictForAlex: "DANGEROUS",
     keyTakeaway:
-      "Direct wheat sourdough + hidden wheat derivative (modified wheat starch in balsamic glaze).",
+      "Dual gluten violation: raw wheat sourdough bread + hidden modified wheat starch in balsamic glaze.",
+    image: "/dishes/bruschetta.jpg",
+    cuisine: "Italian Rustic",
+    prepTime: "8 min",
+    riskHighlights: ["Wheat Sourdough", "Modified Wheat Starch"],
   },
   {
     id: "japanese-salmon-sashimi-bowl",
-    name: "Salmon Sashimi & Steamed Calrose Rice",
-    cuisineOrBrand: "Kura Sushi Bar",
+    name: "Salmon Sashimi & Calrose Bowl",
+    cuisineOrBrand: "Kura Artisan Sushi",
     category: "restaurant_dish",
     description:
-      "Fresh Atlantic salmon sashimi served over steamed plain short-grain rice with cucumber, avocado, and pickled ginger.",
+      "Sashimi-grade Atlantic salmon over steamed short-grain Calrose rice, sliced Hass avocado, and toasted sesame seeds.",
     rawIngredients:
-      "Atlantic salmon sashimi, 100% Calrose short-grain rice, fresh avocado, English cucumber, pickled ginger (ginger, water, salt, acetic acid), toasted white sesame seeds. Prepared in a dedicated gluten-free and peanut-free cold prep station.",
+      "Atlantic salmon sashimi, 100% Calrose short-grain rice, fresh avocado, English cucumber, pickled ginger (ginger, water, salt, acetic acid), toasted white sesame seeds. Prepared in a dedicated allergen-safe cold prep zone.",
     expectedVerdictForAlex: "SAFE",
     keyTakeaway:
-      "Clean protein and naturally gluten-free rice; sesame seeds present at low mild sensitivity without peanut or gluten risk.",
-  },
-  {
-    id: "organic-granola-bar",
-    name: "Crunchy Oat & Honey Granola Bars",
-    cuisineOrBrand: "Nature's Trail Organics",
-    category: "packaged_food",
-    description: "Packaged honey oat snack bars labeled 'Made with Real Oats'.",
-    rawIngredients:
-      "Whole grain rolled oats, honey, brown rice syrup, canola oil, crisp rice (rice flour, sugar, salt, barley malt extract), soy lecithin, natural flavors. Manufactured on shared equipment that also processes peanuts and tree nuts.",
-    expectedVerdictForAlex: "DANGEROUS",
-    keyTakeaway:
-      "Contains barley malt extract (hidden gluten) and shared line warning with peanuts. TabPFN flags facility risk anomaly.",
+      "Naturally gluten-free steamed rice and clean protein. Sesame is at mild tolerance; zero peanut or gluten contamination.",
+    image: "/dishes/salmon_bowl.jpg",
+    cuisine: "Japanese Clean",
+    prepTime: "10 min",
+    riskHighlights: ["No Peanuts", "No Gluten", "Dedicated Cold Station"],
   },
   {
     id: "truffle-parmesan-fries",
@@ -67,24 +71,49 @@ export const SAMPLE_FOOD_DATABASE: SampleFoodItem[] = [
     cuisineOrBrand: "The Craft Gastropub",
     category: "restaurant_dish",
     description:
-      "Crispy Idaho russet potato fries tossed in white truffle oil, rosemary, and aged grated parmesan.",
+      "Crispy Idaho russet potato fries tossed in Italian white truffle oil, sea salt, fresh rosemary, and aged grated parmesan.",
     rawIngredients:
-      "Russet potatoes, white truffle infused olive oil, fresh rosemary, sea salt, aged parmesan cheese (milk, cultures, salt, rennet). Fried in a shared commercial deep fryer that also cooks beer-battered onion rings and fried chicken.",
+      "Russet potatoes, white truffle infused olive oil, fresh rosemary, sea salt, aged parmesan cheese (milk, cultures, salt, rennet). Fried in a shared commercial fryer that also cooks beer-battered fish and onion rings.",
     expectedVerdictForAlex: "CAUTION",
     keyTakeaway:
-      "Ingredients are gluten-free potatoes, but cooking in a shared fryer with beer batter creates severe cross-contact danger.",
+      "Potatoes and cheese are naturally safe, but frying in shared oil with beer-battered items carries high gluten cross-contact.",
+    image: "/dishes/truffle_fries.jpg",
+    cuisine: "Gastropub",
+    prepTime: "14 min",
+    riskHighlights: ["Shared Commercial Fryer (Beer Batter)", "Dairy (Parmesan)"],
+  },
+  {
+    id: "organic-granola-bar",
+    name: "Crunchy Oat & Honey Granola Bar",
+    cuisineOrBrand: "Nature's Trail Organics",
+    category: "packaged_food",
+    description:
+      "Convenience store packaged oat bar labeled 'Made with 100% Whole Grain Rolled Oats & Wild Honey'.",
+    rawIngredients:
+      "Whole grain rolled oats, honey, brown rice syrup, canola oil, crisp rice (rice flour, sugar, salt, barley malt extract), soy lecithin, natural flavors. Manufactured on shared equipment that also processes peanuts and tree nuts.",
+    expectedVerdictForAlex: "DANGEROUS",
+    keyTakeaway:
+      "Hidden barley malt extract is a covert gluten derivative; facility warning flags shared equipment line with peanuts.",
+    image: "/dishes/pad_thai.jpg",
+    cuisine: "Packaged Snack",
+    prepTime: "Ready to eat",
+    riskHighlights: ["Barley Malt Extract", "Shared Line With Peanuts"],
   },
   {
     id: "certified-gf-pasta-primavera",
     name: "Certified GF Penne Primavera",
-    cuisineOrBrand: "Harvest Kitchen (Dedicated Allergen-Safe)",
+    cuisineOrBrand: "Harvest Kitchen (Certified Safe)",
     category: "restaurant_dish",
     description:
-      "100% certified gluten-free corn and rice pasta tossed with roasted zucchini, bell peppers, extra virgin olive oil, and garlic.",
+      "Corn & brown rice penne tossed with roasted squash, bell peppers, fresh garlic, and cold-pressed olive oil in a certified kitchen.",
     rawIngredients:
-      "Certified gluten-free penne (corn flour, brown rice flour), zucchini, red bell pepper, cherry tomatoes, extra virgin olive oil, fresh garlic, basil, black pepper. Prepared in a dedicated allergen-certified allergen-free prep zone.",
+      "Certified gluten-free penne (corn flour, brown rice flour), zucchini, red bell pepper, cherry tomatoes, extra virgin olive oil, fresh garlic, basil, black pepper. Prepared in a dedicated allergen-certified prep station.",
     expectedVerdictForAlex: "SAFE",
     keyTakeaway:
-      "Certified zero-cross-contact gluten-free pasta with zero peanut derivatives. 100% safe for Alex.",
+      "100% verified allergen-free kitchen. Zero cross-contact risk and no peanut or wheat derivatives.",
+    image: "/dishes/bruschetta.jpg",
+    cuisine: "Allergen Certified",
+    prepTime: "15 min",
+    riskHighlights: ["Certified 0 ppm Gluten", "Zero Peanut Traces"],
   },
 ];
