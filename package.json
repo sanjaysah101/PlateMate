@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run --bun next dev --port 3000",
-    "build": "bun run --bun next build",
-    "start": "bun run --bun next start",
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "biome lint .",
     "lint:fix": "biome check . --write",
