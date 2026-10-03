@@ -17,7 +17,7 @@ interface DiningPassportsViewProps {
 const PASSPORTS = [
   {
     code: "en",
-    language: "English (United Kingdom / International)",
+    language: "English (UK & International)",
     flag: "🇬🇧",
     getText: (friendName: string, severe: string, _moderate: string) =>
       `Hello! My friend ${friendName} has severe medical food allergies (${severe}). Even trace amounts or cross-contamination from cooking oils, shared grills, or cutting boards can cause acute illness or anaphylactic shock. Please ensure all dishes served contain ZERO traces of these ingredients, and kindly notify the kitchen chef. Thank you for your care!`,
@@ -45,7 +45,7 @@ const PASSPORTS = [
   },
   {
     code: "fr",
-    language: "French (France / Belgique / Suisse)",
+    language: "French (France / Belgique)",
     flag: "🇫🇷",
     getText: (friendName: string, severe: string, _moderate: string) =>
       `Bonjour! Mon ami(e) ${friendName} a de graves allergies alimentaires médicales (${severe}). Même des traces microscopiques ou la contamination croisée sur les poêles, plaques ou friteuses peuvent déclencher un choc anaphylactique. Merci de vérifier en cuisine que la commande est préparée sans aucun de ces ingrédients. Merci pour votre vigilance!`,
@@ -54,7 +54,7 @@ const PASSPORTS = [
 
 export function DiningPassportsView({
   friend,
-  currentDishName = "Order",
+  currentDishName = "Active Order",
 }: DiningPassportsViewProps) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
@@ -79,25 +79,20 @@ export function DiningPassportsView({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="rounded-2xl border border-border/80 bg-gradient-to-br from-card via-card to-rose-500/5 p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-xl font-extrabold text-foreground">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
               Multilingual Dining Passports
-            </h2>
-            <Badge variant="outline" className="border-rose-500/30 text-rose-500 text-[10px]">
+            </h1>
+            <Badge variant="outline" className="border-border text-muted-foreground text-[10px]">
               For {friend.name}
             </Badge>
-            {currentDishName && (
-              <Badge variant="secondary" className="text-[10px] font-medium">
-                Active Audit: {currentDishName}
-              </Badge>
-            )}
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Show on your mobile device or print these cards before traveling or dining out at
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            Display on mobile or print chef instruction cards before traveling or dining at
             international restaurants.
           </p>
         </div>
@@ -106,7 +101,7 @@ export function DiningPassportsView({
           size="sm"
           variant="outline"
           onClick={handlePrint}
-          className="h-8 gap-1.5 text-xs font-semibold"
+          className="h-8 gap-1.5 text-xs font-medium border-border hover:bg-secondary self-start sm:self-auto"
         >
           <Printer className="size-3.5" />
           Print Passports
@@ -122,13 +117,13 @@ export function DiningPassportsView({
           return (
             <Card
               key={p.code}
-              className="border-border/80 bg-card shadow-xs flex flex-col justify-between"
+              className="border-border bg-card shadow-2xs flex flex-col justify-between"
             >
-              <CardHeader className="p-4 pb-2 border-b border-border/60">
+              <CardHeader className="p-4 pb-2 border-b border-border bg-muted/20">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{p.flag}</span>
-                    <CardTitle className="text-xs font-bold text-foreground">
+                    <CardTitle className="text-xs font-semibold text-foreground">
                       {p.language}
                     </CardTitle>
                   </div>
@@ -140,26 +135,26 @@ export function DiningPassportsView({
               </CardHeader>
 
               <CardContent className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-                <p className="text-xs font-medium text-foreground leading-relaxed whitespace-pre-line bg-muted/20 p-3 rounded-lg border border-border/50">
-                  "{cardText}"
+                <p className="text-xs font-normal text-foreground leading-relaxed whitespace-pre-line bg-muted/20 p-3 rounded-md border border-border">
+                  &ldquo;{cardText}&rdquo;
                 </p>
 
-                <div className="pt-2 border-t border-border/40 flex items-center justify-between">
-                  <span className="text-[10px] text-muted-foreground">
-                    Emergency: {friend.emergencyContact.phone}
+                <div className="pt-2 border-t border-border flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground">
+                    Emergency Contact: {friend.emergencyContact.phone}
                   </span>
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => handleCopy(p.code, cardText)}
-                    className="h-7 text-xs font-semibold gap-1 text-primary hover:text-primary hover:bg-primary/10"
+                    className="h-7 text-xs font-medium gap-1 text-primary hover:text-primary hover:bg-primary/10"
                   >
                     {isCopied ? (
                       <Check className="size-3 text-emerald-500" />
                     ) : (
                       <Copy className="size-3" />
                     )}
-                    {isCopied ? "Copied!" : "Copy"}
+                    {isCopied ? "Copied" : "Copy Card"}
                   </Button>
                 </div>
               </CardContent>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { AlertTriangle, Cpu, Database, Info, Sparkles, TrendingUp, Zap } from "lucide-react";
+import { AlertTriangle, Check, Cpu, Database, Info, Zap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,208 +20,196 @@ export function TabPFNInspector({ audit }: TabPFNInspectorProps) {
     audit.tabpfnIngredients[selectedIngredientIdx] || audit.tabpfnIngredients[0];
 
   return (
-    <Card className="border-emerald-500/20 bg-gradient-to-br from-card via-card to-emerald-500/5 shadow-xl overflow-hidden">
-      <CardHeader className="border-b border-border/60 bg-muted/20 pb-4">
+    <Card className="border-border bg-card shadow-2xs overflow-hidden">
+      <CardHeader className="border-b border-border bg-muted/20 p-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/30">
-              <Cpu className="size-5" />
+            <div className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary font-medium border border-border">
+              <Cpu className="size-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <CardTitle className="text-base sm:text-lg font-bold">
-                  Prior Labs TabPFN Intelligence Inspector
+                <CardTitle className="text-sm sm:text-base font-semibold text-foreground">
+                  In-Context Tabular Predictions
                 </CardTitle>
                 <Badge
                   variant="outline"
-                  className="border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-semibold"
+                  className="border-border bg-secondary text-muted-foreground text-[10px] font-normal"
                 >
-                  Tabular Foundation Model
+                  Bayesian Posterior
                 </Badge>
               </div>
               <CardDescription className="text-xs text-muted-foreground">
-                In-context tabular risk classification, anomaly detection, and cross-contamination
-                probability
+                Click any ingredient to inspect its calibrated feature distribution
               </CardDescription>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto text-xs">
-            <Badge variant="secondary" className="gap-1 font-mono text-[11px] bg-background">
-              <Database className="size-3 text-emerald-500" />
-              {audit.tabpfnIngredients.length} In-Context Vectors
+          <div className="flex items-center gap-2 text-xs">
+            <Badge
+              variant="secondary"
+              className="gap-1 font-mono text-[11px] bg-background border border-border text-foreground"
+            >
+              <Database className="size-3 text-primary" />
+              {audit.tabpfnIngredients.length} In-Context Tokens
             </Badge>
             {audit.tabpfnAnomalyCount > 0 ? (
               <Badge
                 variant="outline"
-                className="border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold text-[11px] gap-1"
+                className="border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400 font-medium text-[11px] gap-1"
               >
                 <AlertTriangle className="size-3" />
-                {audit.tabpfnAnomalyCount} Anomaly Detected
+                {audit.tabpfnAnomalyCount} Outlier Detected
               </Badge>
             ) : (
               <Badge
                 variant="outline"
-                className="border-emerald-500/40 text-emerald-600 text-[11px]"
+                className="border-border text-muted-foreground text-[11px] gap-1"
               >
-                Clean Tabular Prior
+                <Check className="size-3 text-emerald-500" />
+                Prior Validated
               </Badge>
             )}
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="p-4 sm:p-6 space-y-6">
-        {/* Why TabPFN section banner */}
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 text-xs text-muted-foreground flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
-          <div className="space-y-1">
-            <p className="font-bold text-foreground flex items-center gap-1.5 text-sm">
-              <Sparkles className="size-4 text-emerald-500" />
-              Why TabPFN for Dietary Safety?
-            </p>
-            <p className="leading-relaxed">
-              Standard LLMs frequently hallucinate or miss non-linear chemical derivatives (e.g.
-              modified wheat starch vs native potato starch).
-              <strong> TabPFN treats ingredients as numerical tabular features</strong>{" "}
-              (concentration, molecular distance, facility risk, sensitivity weight), evaluating
-              them through synthetic tabular priors in milliseconds with mathematically calibrated
-              confidence.
-            </p>
-          </div>
-        </div>
+      <CardContent className="p-4 sm:p-5 space-y-5">
+        {/* Tabular Dataset Table */}
+        <div className="overflow-x-auto rounded-lg border border-border bg-card">
+          <table className="w-full text-left text-xs">
+            <thead className="border-b border-border bg-muted/40 font-medium text-muted-foreground">
+              <tr>
+                <th className="py-2.5 px-3 font-medium">Ingredient</th>
+                <th className="py-2.5 px-3 font-medium">Predicted Class</th>
+                <th className="py-2.5 px-3 text-center font-medium">P(Safe)</th>
+                <th className="py-2.5 px-3 text-center font-medium">P(Caution)</th>
+                <th className="py-2.5 px-3 text-center font-medium">P(Danger)</th>
+                <th className="py-2.5 px-3 text-center font-medium">Cross-Contact</th>
+                <th className="py-2.5 px-3 text-right font-medium">Anomaly</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {audit.tabpfnIngredients.map((item, idx) => {
+                const isSelected = selectedIngredientIdx === idx;
+                const isDangerous = item.safetyClass === "DANGEROUS";
+                const isCaution = item.safetyClass === "CAUTION";
 
-        {/* Interactive Tabular Dataset Table */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-              <TrendingUp className="size-3.5 text-emerald-500" />
-              Tabular Feature Predictions (Click any row to inspect)
-            </h4>
-            <span className="text-[11px] text-muted-foreground">
-              P(Safe) | P(Caution) | P(Danger)
-            </span>
-          </div>
-
-          <div className="overflow-x-auto rounded-lg border border-border/80 bg-background/50">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-border/80 bg-muted/40 font-semibold text-muted-foreground">
-                <tr>
-                  <th className="py-2.5 px-3">Ingredient</th>
-                  <th className="py-2.5 px-3">TabPFN Class</th>
-                  <th className="py-2.5 px-3 text-center">P(Safe)</th>
-                  <th className="py-2.5 px-3 text-center">P(Caution)</th>
-                  <th className="py-2.5 px-3 text-center">P(Danger)</th>
-                  <th className="py-2.5 px-3 text-center">Cross-Contact %</th>
-                  <th className="py-2.5 px-3 text-right">Anomaly Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/40">
-                {audit.tabpfnIngredients.map((item, idx) => {
-                  const isSelected = selectedIngredientIdx === idx;
-                  const isDangerous = item.safetyClass === "DANGEROUS";
-                  const isCaution = item.safetyClass === "CAUTION";
-
-                  return (
-                    <tr
-                      key={item.ingredientName}
-                      onClick={() => setSelectedIngredientIdx(idx)}
-                      className={`cursor-pointer transition-colors ${
-                        isSelected ? "bg-emerald-500/10 font-medium" : "hover:bg-muted/30"
-                      }`}
-                    >
-                      <td className="py-2 px-3 font-semibold text-foreground flex items-center gap-1.5">
-                        <span className="size-1.5 rounded-full shrink-0 bg-emerald-500" />
-                        <span className="truncate max-w-[160px] sm:max-w-[220px]">
-                          {item.ingredientName}
+                return (
+                  <tr
+                    key={item.ingredientName}
+                    onClick={() => setSelectedIngredientIdx(idx)}
+                    className={`cursor-pointer transition-colors ${
+                      isSelected
+                        ? "bg-accent text-accent-foreground font-medium"
+                        : "hover:bg-muted/40"
+                    }`}
+                  >
+                    <td className="py-2 px-3 text-foreground flex items-center gap-2">
+                      <span
+                        className={`size-1.5 rounded-full shrink-0 ${
+                          isDangerous
+                            ? "bg-destructive"
+                            : isCaution
+                              ? "bg-amber-500"
+                              : "bg-emerald-500"
+                        }`}
+                      />
+                      <span className="truncate max-w-[180px] sm:max-w-[240px] font-medium">
+                        {item.ingredientName}
+                      </span>
+                      {item.isAnomaly && (
+                        <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-medium">
+                          Anomaly
                         </span>
-                        {item.isAnomaly && (
-                          <Badge
-                            variant="outline"
-                            className="border-amber-500/50 bg-amber-500/10 text-amber-600 text-[9px] py-0 px-1"
-                          >
-                            Anomaly
-                          </Badge>
-                        )}
-                      </td>
-                      <td className="py-2 px-3">
-                        <span
-                          className={`inline-flex items-center rounded px-2 py-0.5 text-[10px] font-bold uppercase ${
-                            isDangerous
-                              ? "bg-rose-500/15 text-rose-600 dark:text-rose-400"
-                              : isCaution
-                                ? "bg-amber-500/15 text-amber-600 dark:text-amber-400"
-                                : "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-                          }`}
-                        >
-                          {item.safetyClass}
-                        </span>
-                      </td>
-                      <td className="py-2 px-3 text-center font-mono text-muted-foreground">
-                        {Math.round(item.classProbabilities.safe * 100)}%
-                      </td>
-                      <td className="py-2 px-3 text-center font-mono text-muted-foreground">
-                        {Math.round(item.classProbabilities.caution * 100)}%
-                      </td>
-                      <td className="py-2 px-3 text-center font-mono font-bold text-rose-500">
+                      )}
+                    </td>
+                    <td className="py-2 px-3">
+                      <span
+                        className={`inline-flex items-center rounded px-2 py-0.5 text-[10px] font-medium uppercase ${
+                          isDangerous
+                            ? "bg-destructive/10 text-destructive border border-destructive/20"
+                            : isCaution
+                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                        }`}
+                      >
+                        {item.safetyClass}
+                      </span>
+                    </td>
+                    <td className="py-2 px-3 text-center font-mono tabular-nums text-muted-foreground">
+                      {Math.round(item.classProbabilities.safe * 100)}%
+                    </td>
+                    <td className="py-2 px-3 text-center font-mono tabular-nums text-muted-foreground">
+                      {Math.round(item.classProbabilities.caution * 100)}%
+                    </td>
+                    <td className="py-2 px-3 text-center font-mono tabular-nums">
+                      <span
+                        className={
+                          item.classProbabilities.dangerous > 0.1
+                            ? "text-destructive font-semibold"
+                            : "text-muted-foreground"
+                        }
+                      >
                         {Math.round(item.classProbabilities.dangerous * 100)}%
-                      </td>
-                      <td className="py-2 px-3 text-center font-mono text-muted-foreground">
-                        {item.crossContaminationProb}%
-                      </td>
-                      <td className="py-2 px-3 text-right font-mono">
-                        <span
-                          className={
-                            item.anomalyScore >= 0.5
-                              ? "text-amber-500 font-bold"
-                              : "text-muted-foreground"
-                          }
-                        >
-                          {item.anomalyScore.toFixed(2)}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      </span>
+                    </td>
+                    <td className="py-2 px-3 text-center font-mono tabular-nums text-muted-foreground">
+                      {item.crossContaminationProb}%
+                    </td>
+                    <td className="py-2 px-3 text-right font-mono tabular-nums">
+                      <span
+                        className={
+                          item.anomalyScore >= 0.5
+                            ? "text-amber-600 dark:text-amber-400 font-semibold"
+                            : "text-muted-foreground"
+                        }
+                      >
+                        {item.anomalyScore.toFixed(2)}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
-        {/* Selected Ingredient Deep-Dive */}
+        {/* Selected Vector Deep-Dive */}
         {selectedPrediction && (
-          <div className="rounded-xl border border-border/80 bg-muted/20 p-4 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 pb-3">
+          <div className="rounded-lg border border-border bg-card p-4 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                  In-Context Focus:
+                <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                  Selected Vector
                 </span>
-                <h5 className="text-base font-bold text-foreground">
+                <h3 className="text-base font-semibold text-foreground">
                   {selectedPrediction.ingredientName}
-                </h5>
+                </h3>
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">TabPFN Decision:</span>
-                <Badge
-                  className={`font-bold text-xs ${
+                <span className="text-xs text-muted-foreground">Classification:</span>
+                <span
+                  className={`inline-flex items-center rounded px-2.5 py-0.5 text-xs font-semibold uppercase ${
                     selectedPrediction.safetyClass === "DANGEROUS"
-                      ? "bg-rose-500 text-white"
+                      ? "bg-destructive text-destructive-foreground"
                       : selectedPrediction.safetyClass === "CAUTION"
                         ? "bg-amber-500 text-white"
-                        : "bg-emerald-500 text-white"
+                        : "bg-emerald-600 text-white"
                   }`}
                 >
                   {selectedPrediction.safetyClass}
-                </Badge>
+                </span>
               </div>
             </div>
 
-            {/* Probability Bars */}
+            {/* Calibrated Probability Distribution Bars */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="rounded-lg border border-border/60 bg-background/60 p-3 space-y-1">
+              <div className="rounded-md border border-border bg-muted/20 p-3 space-y-1.5">
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">P(Safe)</span>
-                  <span className="font-bold text-emerald-500">
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
                     {Math.round(selectedPrediction.classProbabilities.safe * 100)}%
                   </span>
                 </div>
@@ -231,10 +219,10 @@ export function TabPFNInspector({ audit }: TabPFNInspectorProps) {
                 />
               </div>
 
-              <div className="rounded-lg border border-border/60 bg-background/60 p-3 space-y-1">
+              <div className="rounded-md border border-border bg-muted/20 p-3 space-y-1.5">
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">P(Caution / Trace)</span>
-                  <span className="font-bold text-amber-500">
+                  <span className="font-semibold text-amber-600 dark:text-amber-400 tabular-nums">
                     {Math.round(selectedPrediction.classProbabilities.caution * 100)}%
                   </span>
                 </div>
@@ -244,25 +232,61 @@ export function TabPFNInspector({ audit }: TabPFNInspectorProps) {
                 />
               </div>
 
-              <div className="rounded-lg border border-border/60 bg-background/60 p-3 space-y-1">
+              <div className="rounded-md border border-border bg-muted/20 p-3 space-y-1.5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">P(Severe Reaction)</span>
-                  <span className="font-bold text-rose-500">
+                  <span className="text-muted-foreground">P(Severe Hazard)</span>
+                  <span className="font-semibold text-destructive tabular-nums">
                     {Math.round(selectedPrediction.classProbabilities.dangerous * 100)}%
                   </span>
                 </div>
                 <Progress
                   value={selectedPrediction.classProbabilities.dangerous * 100}
-                  className="h-1.5 [&>div]:bg-rose-500"
+                  className="h-1.5 [&>div]:bg-destructive"
                 />
               </div>
             </div>
 
-            {/* Explanation & Recommendation */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-              <div className="rounded-lg border border-border/60 bg-background/60 p-3">
-                <p className="font-bold text-foreground mb-1 flex items-center gap-1.5">
-                  <Info className="size-3.5 text-sky-500" />
+            {/* Vector Attributes breakdown */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
+              <div className="rounded border border-border bg-muted/10 p-2">
+                <span className="text-[10px] text-muted-foreground block font-sans">
+                  Concentration
+                </span>
+                <span className="text-foreground font-semibold tabular-nums">
+                  {selectedPrediction.concentrationPct}%
+                </span>
+              </div>
+              <div className="rounded border border-border bg-muted/10 p-2">
+                <span className="text-[10px] text-muted-foreground block font-sans">
+                  Processing Level
+                </span>
+                <span className="text-foreground font-semibold tabular-nums">
+                  {selectedPrediction.processingLevel}/5
+                </span>
+              </div>
+              <div className="rounded border border-border bg-muted/10 p-2">
+                <span className="text-[10px] text-muted-foreground block font-sans">
+                  Cross-Contact Risk
+                </span>
+                <span className="text-foreground font-semibold tabular-nums">
+                  {selectedPrediction.crossContaminationProb}%
+                </span>
+              </div>
+              <div className="rounded border border-border bg-muted/10 p-2">
+                <span className="text-[10px] text-muted-foreground block font-sans">
+                  Anomaly Distance
+                </span>
+                <span className="text-foreground font-semibold tabular-nums">
+                  {selectedPrediction.anomalyScore.toFixed(2)}
+                </span>
+              </div>
+            </div>
+
+            {/* Rationale and Kitchen Directions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-1">
+              <div className="rounded-md border border-border bg-muted/10 p-3">
+                <p className="font-medium text-foreground mb-1 flex items-center gap-1.5">
+                  <Info className="size-3.5 text-primary" />
                   Model Feature Rationale
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
@@ -270,10 +294,10 @@ export function TabPFNInspector({ audit }: TabPFNInspectorProps) {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-border/60 bg-background/60 p-3">
-                <p className="font-bold text-foreground mb-1 flex items-center gap-1.5">
-                  <Zap className="size-3.5 text-amber-500" />
-                  Actionable Kitchen Direction
+              <div className="rounded-md border border-border bg-muted/10 p-3">
+                <p className="font-medium text-foreground mb-1 flex items-center gap-1.5">
+                  <Zap className="size-3.5 text-primary" />
+                  Kitchen & Culinary Action
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   {selectedPrediction.recommendation}

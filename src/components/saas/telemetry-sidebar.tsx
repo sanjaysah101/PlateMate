@@ -31,10 +31,10 @@ export function TelemetrySidebar({
 }: TelemetrySidebarProps) {
   if (!audit) {
     return (
-      <div className="rounded-2xl border border-dashed border-border p-8 text-center text-xs text-muted-foreground space-y-2">
-        <Cpu className="size-6 text-muted-foreground mx-auto" />
-        <p className="font-semibold text-foreground">Awaiting In-Context Diagnostic</p>
-        <p>Select any dish or input ingredient text on the left to trigger TabPFN evaluation.</p>
+      <div className="rounded-lg border border-dashed border-border p-6 text-center text-xs text-muted-foreground space-y-2 bg-card">
+        <Cpu className="size-5 text-muted-foreground mx-auto" />
+        <p className="font-medium text-foreground">Awaiting In-Context Diagnostic</p>
+        <p>Select any dish or enter ingredients to evaluate with TabPFN.</p>
       </div>
     );
   }
@@ -43,47 +43,45 @@ export function TelemetrySidebar({
   const isCaution = audit.overallSafety === "CAUTION";
 
   // Score arc calculation for circular gauge
-  const radius = 38;
+  const radius = 36;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (audit.overallRiskScore / 100) * circumference;
 
   return (
-    <div className="space-y-4">
-      {/* Top Main Diagnosis Card */}
-      <Card
-        className={`border overflow-hidden transition-all duration-300 shadow-md ${
-          isDangerous
-            ? "border-rose-500/50 bg-gradient-to-br from-rose-950/20 via-card to-card"
-            : isCaution
-              ? "border-amber-500/50 bg-gradient-to-br from-amber-950/20 via-card to-card"
-              : "border-emerald-500/50 bg-gradient-to-br from-emerald-950/20 via-card to-card"
-        }`}
-      >
-        <CardHeader className="p-4 pb-3 border-b border-border/60">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              TabPFN Safety Verdict
+    <div className="flex flex-col gap-4">
+      {/* 1. Main Safety Diagnosis Card */}
+      <Card className="border-border bg-card shadow-2xs overflow-hidden">
+        <CardHeader className="p-4 pb-3 border-b border-border bg-muted/20">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-medium text-muted-foreground uppercase tracking-wide text-[11px]">
+              Safety Verdict
             </span>
-            <span className="text-[10px] font-mono text-muted-foreground">
-              Confidence: <strong>{audit.confidencePct}%</strong>
+            <span className="font-mono text-muted-foreground text-[11px]">
+              Confidence: <strong className="text-foreground">{audit.confidencePct}%</strong>
             </span>
           </div>
 
           <div className="pt-2 flex items-center gap-3">
-            <div className="relative size-14 rounded-xl overflow-hidden border border-border/80 shrink-0">
-              <Image src={dishImage} alt={audit.foodName} fill className="object-cover" />
+            <div className="relative size-12 rounded-md overflow-hidden border border-border shrink-0 bg-muted">
+              <Image
+                src={dishImage}
+                alt={audit.foodName}
+                fill
+                sizes="48px"
+                className="object-cover"
+              />
             </div>
 
             <div className="space-y-1 min-w-0 flex-1">
-              <h3 className="font-extrabold text-sm text-foreground truncate">{audit.foodName}</h3>
+              <h3 className="font-semibold text-sm text-foreground truncate">{audit.foodName}</h3>
               <div>
                 <span
-                  className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-black uppercase tracking-wider ${
+                  className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
                     isDangerous
-                      ? "bg-rose-600 text-white"
+                      ? "bg-destructive/10 text-destructive border border-destructive/20"
                       : isCaution
-                        ? "bg-amber-500 text-white"
-                        : "bg-emerald-600 text-white"
+                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+                        : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
                   }`}
                 >
                   {isDangerous ? (
@@ -101,45 +99,44 @@ export function TelemetrySidebar({
         </CardHeader>
 
         <CardContent className="p-4 space-y-4">
-          {/* Circular SVG Gauge & Risk Breakdown */}
-          <div className="flex items-center justify-between rounded-xl border border-border/60 bg-muted/20 p-3.5">
-            <div className="space-y-1 text-xs">
-              <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-                Risk Index
+          {/* Circular SVG Gauge & Risk Index */}
+          <div className="flex items-center justify-between rounded-lg border border-border bg-muted/20 p-3">
+            <div className="space-y-0.5 text-xs">
+              <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+                Calibrated Risk Index
               </span>
-              <div className="text-xl font-black">
+              <div className="text-2xl font-semibold tabular-nums">
                 <span
                   className={
                     isDangerous
-                      ? "text-rose-500"
+                      ? "text-destructive"
                       : isCaution
-                        ? "text-amber-500"
-                        : "text-emerald-500"
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-emerald-600 dark:text-emerald-400"
                   }
                 >
                   {audit.overallRiskScore}
                 </span>
                 <span className="text-xs text-muted-foreground font-normal"> / 100</span>
               </div>
-              <div className="text-[10px] text-muted-foreground">
-                For patient: <strong>{friend.name}</strong>
+              <div className="text-[11px] text-muted-foreground">
+                Evaluated for: <strong className="text-foreground">{friend.name}</strong>
               </div>
             </div>
 
-            <div className="relative size-20 shrink-0 flex items-center justify-center">
+            <div className="relative size-18 shrink-0 flex items-center justify-center">
               <svg
                 className="size-full -rotate-90"
                 viewBox="0 0 100 100"
                 role="img"
                 aria-label="Allergen Risk Gauge"
               >
-                <title>Allergen Risk Gauge</title>
                 <circle
                   cx="50"
                   cy="50"
                   r={radius}
-                  className="stroke-muted/40"
-                  strokeWidth="7"
+                  className="stroke-muted"
+                  strokeWidth="8"
                   fill="none"
                 />
                 <circle
@@ -148,12 +145,12 @@ export function TelemetrySidebar({
                   r={radius}
                   className={`transition-all duration-700 ease-out ${
                     isDangerous
-                      ? "stroke-rose-500"
+                      ? "stroke-destructive"
                       : isCaution
                         ? "stroke-amber-500"
                         : "stroke-emerald-500"
                   }`}
-                  strokeWidth="7"
+                  strokeWidth="8"
                   strokeDasharray={circumference}
                   strokeDashoffset={strokeDashoffset}
                   strokeLinecap="round"
@@ -161,7 +158,9 @@ export function TelemetrySidebar({
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-xs font-bold text-foreground">{audit.overallRiskScore}%</span>
+                <span className="text-xs font-semibold tabular-nums text-foreground">
+                  {audit.overallRiskScore}%
+                </span>
               </div>
             </div>
           </div>
@@ -170,19 +169,19 @@ export function TelemetrySidebar({
           <Button
             size="sm"
             onClick={onOpenWaiterCard}
-            className="w-full h-8 text-xs font-bold gap-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg shadow-xs"
+            className="w-full h-8 text-xs font-medium gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-2xs"
           >
             <ShieldAlert className="size-3.5" />
-            Generate Server Dining Card
+            Generate Server Dining Pass
           </Button>
         </CardContent>
       </Card>
 
-      {/* Allergen Triggers Alert */}
+      {/* 2. Allergen Triggers Alert */}
       {audit.allergenFlags.length > 0 && (
-        <Card className="border-rose-500/30 bg-card shadow-xs">
-          <CardHeader className="p-3.5 pb-2 border-b border-border/50">
-            <CardTitle className="text-xs font-bold text-rose-500 flex items-center gap-1.5 uppercase tracking-wide">
+        <Card className="border-destructive/30 bg-card shadow-2xs">
+          <CardHeader className="p-3.5 pb-2 border-b border-border/80">
+            <CardTitle className="text-xs font-semibold text-destructive flex items-center gap-1.5 uppercase tracking-wide">
               <AlertCircle className="size-3.5" />
               Active Allergen Triggers ({audit.allergenFlags.length})
             </CardTitle>
@@ -191,15 +190,15 @@ export function TelemetrySidebar({
             {audit.allergenFlags.map((flag) => (
               <div
                 key={`${flag.allergen}-${flag.foundIn}`}
-                className="rounded-lg border border-rose-500/20 bg-rose-500/5 p-2.5 space-y-1"
+                className="rounded-md border border-destructive/20 bg-destructive/5 p-2.5 space-y-1"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-foreground text-xs">{flag.allergen}</span>
-                  <span className="text-[10px] font-bold uppercase text-rose-500">
+                  <span className="font-semibold text-foreground text-xs">{flag.allergen}</span>
+                  <span className="text-[10px] font-semibold uppercase text-destructive">
                     {flag.severity}
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground">Found in: {flag.foundIn}</p>
+                <p className="text-[11px] text-muted-foreground">Source: {flag.foundIn}</p>
                 <p className="text-[11px] text-muted-foreground leading-snug">{flag.riskDetails}</p>
               </div>
             ))}
@@ -207,27 +206,27 @@ export function TelemetrySidebar({
         </Card>
       )}
 
-      {/* Chef Substitutions */}
+      {/* 3. Kitchen Safe Substitutions */}
       {audit.safeSubstitutions.length > 0 && (
-        <Card className="border-emerald-500/30 bg-card shadow-xs">
-          <CardHeader className="p-3.5 pb-2 border-b border-border/50">
-            <CardTitle className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 uppercase tracking-wide">
-              <UtensilsCrossed className="size-3.5" />
-              Kitchen Swaps ({audit.safeSubstitutions.length})
+        <Card className="border-border bg-card shadow-2xs">
+          <CardHeader className="p-3.5 pb-2 border-b border-border/80">
+            <CardTitle className="text-xs font-semibold text-foreground flex items-center gap-1.5 uppercase tracking-wide">
+              <UtensilsCrossed className="size-3.5 text-primary" />
+              Recommended Kitchen Swaps ({audit.safeSubstitutions.length})
             </CardTitle>
           </CardHeader>
           <CardContent className="p-3.5 space-y-2 text-xs">
             {audit.safeSubstitutions.map((swap) => (
               <div
                 key={`${swap.originalIngredient}-${swap.safeAlternative}`}
-                className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2.5 space-y-1"
+                className="rounded-md border border-border bg-muted/20 p-2.5 space-y-1"
               >
-                <div className="flex items-center gap-1.5 font-bold text-xs">
-                  <span className="line-through text-rose-500/70">{swap.originalIngredient}</span>
-                  <ArrowRight className="size-3 text-muted-foreground" />
-                  <span className="text-emerald-600 dark:text-emerald-400">
-                    {swap.safeAlternative}
+                <div className="flex items-center gap-1.5 font-medium text-xs">
+                  <span className="line-through text-destructive/80">
+                    {swap.originalIngredient}
                   </span>
+                  <ArrowRight className="size-3 text-muted-foreground" />
+                  <span className="text-foreground font-semibold">{swap.safeAlternative}</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-snug">{swap.notes}</p>
               </div>

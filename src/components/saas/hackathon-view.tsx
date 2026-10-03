@@ -7,115 +7,116 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function HackathonView() {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       {/* Banner */}
-      <div className="rounded-2xl border border-border/80 bg-gradient-to-br from-card via-card to-amber-500/5 p-6 sm:p-8 shadow-xs space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge className="bg-amber-600 text-white font-extrabold text-[10px] uppercase px-2.5 py-0.5">
-            DEV Hacktoberfest 2026
-          </Badge>
-          <span className="text-xs text-muted-foreground">
-            Challenge 1 of 5: <strong>Build for a Friend</strong>
-          </span>
-          <span className="text-border">•</span>
-          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-            Target Category: Best Use of TabPFN ($200)
-          </span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground">
+              PlateMate Architecture Brief
+            </h1>
+            <Badge variant="outline" className="border-border text-muted-foreground text-[10px]">
+              DEV Hacktoberfest 2026
+            </Badge>
+          </div>
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl">
+            Challenge #1: Build for a Friend. Technical specification and architecture documentation
+            for the Prior Labs TabPFN category.
+          </p>
         </div>
-
-        <h2 className="text-2xl font-extrabold text-foreground tracking-tight">
-          PlateMate: The Story Behind Building for Alex
-        </h2>
-
-        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-3xl">
-          Hacktoberfest 2026 is about building brand-new projects with open-source AI at their core.
-          Here is our official project brief and technical documentation for the DEV submission
-          post.
-        </p>
       </div>
 
       {/* Story Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* The Friend */}
-        <Card className="border-border/80 bg-card shadow-xs">
-          <CardHeader className="p-4 pb-2 border-b border-border/60">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rose-500 flex items-center gap-1.5">
-              <Heart className="size-3.5 fill-rose-500" />
-              1. The Friend & The Real Problem
+        <Card className="border-border bg-card shadow-2xs">
+          <CardHeader className="p-4 pb-2 border-b border-border bg-muted/20">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wide text-foreground flex items-center gap-1.5">
+              <Heart className="size-3.5 text-destructive" />
+              1. The Real-World Need
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 space-y-2 text-xs text-muted-foreground leading-relaxed">
             <p>
               My roommate and close friend <strong>Alex</strong> lives with strict Celiac disease
-              (an autoimmune reaction where &gt;20 ppm gluten destroys their small intestine) and
-              life-threatening peanut anaphylaxis requiring an EpiPen.
+              (autoimmune intestinal damage from &gt;20 ppm gluten) and severe peanut anaphylaxis
+              requiring an EpiPen.
             </p>
             <p>
-              Ordering takeout or dining out with our friend group has always been an ordeal of
-              anxiety, awkward interrogations of busy restaurant servers, and microscopic label
-              scanning. PlateMate gives Alex instant certainty.
+              Ordering food or dining out with our friend group is a constant source of stress,
+              awkward interrogations of busy restaurant servers, and microscopic label scanning.
+              PlateMate gives Alex instant, calibrated certainty.
             </p>
           </CardContent>
         </Card>
 
         {/* Why Open-Source AI */}
-        <Card className="border-border/80 bg-card shadow-xs">
-          <CardHeader className="p-4 pb-2 border-b border-border/60">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-              <Lock className="size-3.5" />
-              2. Why Open-Source AI at the Core?
+        <Card className="border-border bg-card shadow-2xs">
+          <CardHeader className="p-4 pb-2 border-b border-border bg-muted/20">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wide text-foreground flex items-center gap-1.5">
+              <Lock className="size-3.5 text-primary" />
+              2. Privacy & Edge AI Foundation
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 space-y-2 text-xs text-muted-foreground leading-relaxed">
             <p>
-              <strong>Health Privacy is Sacred:</strong> Medical conditions and chronic allergies
-              are personal health data. Closed proprietary models harvest and retain user queries.
-              PlateMate evaluates food safety locally—Alex's health profile never leaves the device.
+              <strong className="text-foreground">Health Privacy by Design:</strong> Dietary medical
+              conditions are personal health information. Cloud LLMs log and retain user prompts on
+              remote servers. PlateMate evaluates culinary vectors locally on-device.
             </p>
             <p>
-              <strong>Offline Edge Reliability:</strong> Grocery basements and subway food halls
-              frequently lack cellular service. Open-source local inference guarantees safety
-              anywhere.
+              <strong className="text-foreground">Offline Edge Reliability:</strong> Subway food
+              courts and grocery basements frequently suffer from spotty connectivity. Local tabular
+              priors guarantee evaluation anywhere.
             </p>
           </CardContent>
         </Card>
 
         {/* Best Use of TabPFN */}
-        <Card className="border-border/80 bg-card shadow-xs md:col-span-2">
-          <CardHeader className="p-4 pb-2 border-b border-border/60">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
-              <Cpu className="size-3.5" />
-              3. Featured Partner Category: Best Use of TabPFN ($200 USD)
+        <Card className="border-border bg-card shadow-2xs md:col-span-2">
+          <CardHeader className="p-4 pb-2 border-b border-border bg-muted/20">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wide text-foreground flex items-center gap-1.5">
+              <Cpu className="size-3.5 text-primary" />
+              3. Prior Labs TabPFN Tabular Feature Space
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 space-y-2 text-xs text-muted-foreground leading-relaxed">
+          <CardContent className="p-4 space-y-3 text-xs text-muted-foreground leading-relaxed">
             <p>
-              Instead of using crude keyword matchers or hallucinations from closed LLMs, PlateMate
-              converts ingredients into structured numerical feature spaces:
+              Instead of relying on fragile keyword matching or hallucinated generative text,
+              PlateMate converts ingredients into 6-dimensional numerical feature spaces evaluated
+              through TabPFN synthetic priors:
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 py-2 font-mono text-[11px] text-foreground">
-              <div className="rounded bg-muted/40 p-2 border border-border/60">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-[11px] text-foreground">
+              <div className="rounded border border-border bg-muted/20 p-2.5">
+                <span className="text-muted-foreground text-[10px] block font-sans">Feature 1</span>
                 concentrationPct
               </div>
-              <div className="rounded bg-muted/40 p-2 border border-border/60">processingLevel</div>
-              <div className="rounded bg-muted/40 p-2 border border-border/60">
-                facilityRiskScore
+              <div className="rounded border border-border bg-muted/20 p-2.5">
+                <span className="text-muted-foreground text-[10px] block font-sans">Feature 2</span>
+                processingLevel
               </div>
-              <div className="rounded bg-muted/40 p-2 border border-border/60">
-                derivativeDistance
+              <div className="rounded border border-border bg-muted/20 p-2.5">
+                <span className="text-muted-foreground text-[10px] block font-sans">Feature 3</span>
+                facilityCrossContact
               </div>
-              <div className="rounded bg-muted/40 p-2 border border-border/60">
-                friendSensitivityWeight
+              <div className="rounded border border-border bg-muted/20 p-2.5">
+                <span className="text-muted-foreground text-[10px] block font-sans">Feature 4</span>
+                molecularDistance
               </div>
-              <div className="rounded bg-muted/40 p-2 border border-border/60">
+              <div className="rounded border border-border bg-muted/20 p-2.5">
+                <span className="text-muted-foreground text-[10px] block font-sans">Feature 5</span>
+                sensitivityWeight
+              </div>
+              <div className="rounded border border-border bg-muted/20 p-2.5">
+                <span className="text-muted-foreground text-[10px] block font-sans">Feature 6</span>
                 hiddenAdditiveScore
               </div>
             </div>
             <p>
-              <strong>Prior Labs' TabPFN</strong> in-context transformer evaluates these vectors in
-              milliseconds, outputting mathematically calibrated posterior probabilities (P(Safe),
-              P(Caution), P(Dangerous)) and spotting deceptive additives like{" "}
-              <em>modified wheat starch in balsamic glaze</em> or{" "}
+              The <strong className="text-foreground">Prior Labs TabPFN</strong> in-context
+              transformer evaluates these vectors in milliseconds, computing mathematically
+              calibrated posterior distributions (P(Safe), P(Caution), P(Dangerous)) and identifying
+              deceptive derivatives like <em>modified wheat starch in balsamic glaze</em> or{" "}
               <em>barley malt extract in granola bars</em>.
             </p>
           </CardContent>
@@ -123,29 +124,29 @@ export function HackathonView() {
       </div>
 
       {/* Checklist Card */}
-      <Card className="border-border/80 bg-card shadow-xs">
-        <CardHeader className="p-4 pb-2 border-b border-border/60">
-          <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-            <FileCheck className="size-3.5 text-emerald-500" />
-            DEV.to Challenge Submission Checklist
+      <Card className="border-border bg-card shadow-2xs">
+        <CardHeader className="p-4 pb-2 border-b border-border bg-muted/20">
+          <CardTitle className="text-xs font-semibold uppercase tracking-wide text-foreground flex items-center gap-1.5">
+            <FileCheck className="size-3.5 text-primary" />
+            Hackathon Requirements Checklist
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
+        <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-3.5 text-emerald-500" />
-            <span>Theme: Build for a Friend (Alex - Celiac & Anaphylaxis)</span>
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span>Theme: Build for a Friend (Alex — Celiac & Anaphylaxis)</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-3.5 text-emerald-500" />
-            <span>Core: Open-Source AI & Local Health Privacy</span>
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span>Open-Source AI: Prior Labs TabPFN Foundation Model</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-3.5 text-emerald-500" />
-            <span>Partner Prize: Best Use of TabPFN ($200)</span>
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span>Target Category: Best Use of TabPFN</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-3.5 text-emerald-500" />
-            <span>Real-World Dining: Multilingual Waiter Safe Passports</span>
+            <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
+            <span>Real-World Dining: Multilingual Chef Dining Passports</span>
           </div>
         </CardContent>
       </Card>

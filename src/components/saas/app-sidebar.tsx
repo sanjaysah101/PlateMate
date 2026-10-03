@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  Award,
   ChevronRight,
   Cpu,
-  FileText,
-  Heart,
+  Languages,
   Scan,
   ShieldAlert,
   ShieldCheck,
+  Sparkles,
+  User,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,101 +29,96 @@ export function AppSidebar({
   onOpenProfile,
   onOpenWaiterCard,
 }: AppSidebarProps) {
-  const navItems = [
+  const primaryNav = [
     {
       id: "scanner",
       label: "Diagnostic Scanner",
       icon: Scan,
-      badge: "Live",
-      badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      badge: "Real-time",
     },
     {
       id: "tabpfn-lab",
-      label: "TabPFN Neural Lab",
+      label: "TabPFN AI Lab",
       icon: Cpu,
-      badge: "Prior Labs",
-      badgeColor: "bg-primary/10 text-primary border-primary/20",
+      badge: "v2 Active",
     },
     {
       id: "allergen-vault",
-      label: "Allergen Defense Rules",
+      label: "Allergen Rules",
       icon: ShieldCheck,
-      badge: `${friend.rules.length} Active`,
-      badgeColor: "bg-muted text-muted-foreground border-border",
+      badge: `${friend.rules.length} rules`,
     },
     {
       id: "dining-passport",
       label: "Dining Passports",
-      icon: FileText,
-      badge: "5 Langs",
-      badgeColor: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+      icon: Languages,
+      badge: "5 langs",
     },
+  ];
+
+  const secondaryNav = [
     {
       id: "hackathon",
-      label: "DEV Challenge #1",
-      icon: Award,
-      badge: "$250 + $200",
-      badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+      label: "Challenge Brief",
+      icon: Sparkles,
+      badge: null,
     },
   ];
 
   return (
-    <aside className="w-64 shrink-0 border-r border-border/70 bg-card/50 backdrop-blur-xl flex flex-col justify-between h-screen sticky top-0 select-none overflow-hidden">
+    <aside className="w-64 shrink-0 border-r border-sidebar-border bg-sidebar flex flex-col justify-between h-screen sticky top-0 select-none overflow-hidden transition-colors">
       {/* Top Section */}
-      <div className="flex flex-col gap-6 p-4">
-        {/* Workspace Brand / Friend Switcher */}
+      <div className="flex flex-col gap-5 p-4">
+        {/* Workspace Brand Header */}
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2.5">
-            <div className="size-8 rounded-lg bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-1 ring-white/20">
-              P
+            <div className="size-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-semibold text-sm shadow-xs">
+              <ShieldCheck className="size-4" />
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-sm tracking-tight text-foreground flex items-center gap-1.5">
+              <span className="font-semibold text-sm tracking-tight text-foreground flex items-center gap-1.5">
                 PlateMate
-                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-muted text-muted-foreground">
-                  v1.0
+                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-secondary text-secondary-foreground">
+                  Pro
                 </span>
               </span>
-              <span className="text-[10px] text-muted-foreground font-medium">
-                Dietary Safety AI
+              <span className="text-[11px] text-muted-foreground font-normal">
+                Dietary Safety Intelligence
               </span>
             </div>
           </div>
         </div>
 
-        {/* Friend Active Anchor Card */}
+        {/* Active Profile Pill / Switcher */}
         <button
           type="button"
           onClick={onOpenProfile}
-          className="w-full text-left rounded-xl border border-border/80 bg-background/50 hover:bg-background p-2.5 transition-all cursor-pointer group shadow-2xs"
+          className="w-full text-left rounded-lg border border-border bg-card/60 hover:bg-card p-2.5 transition-all cursor-pointer group shadow-2xs"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="size-7 rounded-full bg-rose-500/10 flex items-center justify-center text-sm border border-rose-500/20">
-                {friend.avatar}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="size-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold shrink-0">
+                {friend.avatar || <User className="size-3.5" />}
               </div>
-              <div className="flex flex-col text-left">
-                <span className="text-xs font-bold text-foreground group-hover:text-rose-500 transition-colors flex items-center gap-1">
+              <div className="flex flex-col text-left min-w-0">
+                <span className="text-xs font-medium text-foreground group-hover:text-primary transition-colors truncate">
                   {friend.name}
-                  <Heart className="size-2.5 fill-rose-500 text-rose-500" />
                 </span>
-                <span className="text-[10px] text-muted-foreground truncate max-w-[120px]">
-                  Celiac & Anaphylaxis
+                <span className="text-[10px] text-muted-foreground truncate">
+                  Celiac · Peanut Anaphylaxis
                 </span>
               </div>
             </div>
-            <ChevronRight className="size-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+            <ChevronRight className="size-3.5 text-muted-foreground group-hover:translate-x-0.5 transition-transform shrink-0" />
           </div>
         </button>
 
-        {/* Nav Links */}
+        {/* Primary Workspace Navigation */}
         <div className="space-y-1">
-          <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80">
-            Workspace
-          </div>
+          <div className="px-2 py-1 text-[11px] font-medium text-muted-foreground">WORKSPACE</div>
 
           <nav className="space-y-0.5">
-            {navItems.map((item) => {
+            {primaryNav.map((item) => {
               const Icon = item.icon;
               const isActive = currentView === item.id;
               return (
@@ -131,33 +126,28 @@ export function AppSidebar({
                   key={item.id}
                   type="button"
                   onClick={() => onSelectView(item.id)}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium transition-all duration-150 ${
+                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-md text-xs transition-colors relative ${
                     isActive
-                      ? "bg-primary text-primary-foreground font-semibold shadow-sm nav-active-glow"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                   }`}
                 >
+                  {isActive && (
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-0.75 rounded-r bg-primary" />
+                  )}
                   <div className="flex items-center gap-2.5">
-                    <div
-                      className={`size-6 rounded-md flex items-center justify-center shrink-0 transition-all ${
-                        isActive ? "bg-primary-foreground/15" : "bg-muted/80 group-hover:bg-muted"
-                      }`}
-                    >
-                      <Icon
-                        className={`size-3.5 ${
-                          isActive ? "text-primary-foreground" : "text-muted-foreground"
-                        }`}
-                      />
-                    </div>
+                    <Icon
+                      className={`size-4 ${isActive ? "text-primary" : "text-muted-foreground"}`}
+                    />
                     <span>{item.label}</span>
                   </div>
 
                   {item.badge && (
                     <span
-                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded-full border ${
+                      className={`text-[10px] px-1.5 py-0.2 rounded font-normal ${
                         isActive
-                          ? "border-primary-foreground/30 bg-primary-foreground/20 text-primary-foreground"
-                          : item.badgeColor
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground bg-secondary/80"
                       }`}
                     >
                       {item.badge}
@@ -168,36 +158,69 @@ export function AppSidebar({
             })}
           </nav>
         </div>
+
+        {/* Secondary Navigation */}
+        <div className="space-y-1">
+          <div className="px-2 py-1 text-[11px] font-medium text-muted-foreground">
+            DOCUMENTATION
+          </div>
+
+          <nav className="space-y-0.5">
+            {secondaryNav.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onSelectView(item.id)}
+                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-md text-xs transition-colors relative ${
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                  }`}
+                >
+                  {isActive && (
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-0.75 rounded-r bg-primary" />
+                  )}
+                  <div className="flex items-center gap-2.5">
+                    <Icon
+                      className={`size-4 ${isActive ? "text-primary" : "text-muted-foreground"}`}
+                    />
+                    <span>{item.label}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
-      {/* Bottom User / Status Panel */}
-      <div className="p-4 border-t border-border/60 space-y-3">
-        {/* TabPFN Telemetry Status */}
-        <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 text-[11px] space-y-1.5 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/3 to-transparent pointer-events-none" />
+      {/* Bottom Section */}
+      <div className="p-3 border-t border-sidebar-border space-y-2.5 bg-sidebar/50">
+        {/* TabPFN Engine Status */}
+        <div className="rounded-lg border border-border bg-card/60 p-2.5 text-[11px] space-y-1">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-foreground flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-emerald-500 animate-gentle-ping" />
-              TabPFN Model v2
+            <span className="font-medium text-foreground flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              TabPFN In-Context Engine
             </span>
-            <span className="font-mono text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded px-1">
-              Live
-            </span>
+            <span className="text-[10px] text-muted-foreground font-mono">v2.0</span>
           </div>
-          <p className="text-[10px] text-muted-foreground leading-tight">
-            Prior Labs tabular engine active. Local-first privacy.
+          <p className="text-[10px] text-muted-foreground leading-snug">
+            Synthetic prior transformer running locally on device.
           </p>
         </div>
 
-        {/* Quick Server Card Button */}
+        {/* Server Card Action */}
         <Button
           variant="outline"
           size="sm"
           onClick={onOpenWaiterCard}
-          className="w-full text-xs font-semibold gap-1.5 border-rose-500/30 hover:bg-rose-500/10 text-foreground"
+          className="w-full text-xs font-medium gap-1.5 h-8 border-border bg-card hover:bg-secondary text-foreground"
         >
-          <ShieldAlert className="size-3.5 text-rose-500" />
-          Server Safe Card
+          <ShieldAlert className="size-3.5 text-primary" />
+          <span>Server Dining Pass</span>
         </Button>
       </div>
     </aside>

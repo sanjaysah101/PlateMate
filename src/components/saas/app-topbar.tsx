@@ -1,6 +1,6 @@
 "use client";
 
-import { ShieldAlert, Zap } from "lucide-react";
+import { Plus, ShieldAlert } from "lucide-react";
 
 import { CommandSearch } from "@/components/saas/command-search";
 import { Button } from "@/components/ui/button";
@@ -17,12 +17,12 @@ interface AppTopbarProps {
   onSelectView: (view: string) => void;
 }
 
-const VIEW_LABELS: Record<string, string> = {
+const VIEW_TITLES: Record<string, string> = {
   scanner: "Food Diagnostic Scanner",
-  "tabpfn-lab": "TabPFN Neural Lab",
+  "tabpfn-lab": "TabPFN Intelligence Laboratory",
   "allergen-vault": "Allergen Defense Rules",
-  "dining-passport": "Dining Passports",
-  hackathon: "DEV Hacktoberfest 2026",
+  "dining-passport": "Multilingual Dining Passports",
+  hackathon: "DEV Hacktoberfest 2026 Project Brief",
 };
 
 export function AppTopbar({
@@ -35,18 +35,18 @@ export function AppTopbar({
   onSelectView,
 }: AppTopbarProps) {
   return (
-    <header className="h-14 border-b border-border/70 bg-card/70 backdrop-blur-md px-5 flex items-center justify-between sticky top-0 z-30 gap-4">
-      {/* Left: Breadcrumbs */}
+    <header className="h-14 border-b border-border bg-card/80 backdrop-blur-md px-5 flex items-center justify-between sticky top-0 z-30 gap-4">
+      {/* Left: Clean Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs min-w-0 shrink-0">
         <span className="text-muted-foreground font-medium hidden sm:inline">PlateMate</span>
         <span className="text-border hidden sm:inline">/</span>
         <span className="font-semibold text-foreground truncate">
-          {VIEW_LABELS[currentView] ?? "Food Diagnostic Scanner"}
+          {VIEW_TITLES[currentView] ?? "Diagnostic Scanner"}
         </span>
       </div>
 
-      {/* Center: Live Command Search */}
-      <div className="flex-1 flex justify-center">
+      {/* Center: Command Search */}
+      <div className="flex-1 max-w-md mx-auto">
         <CommandSearch
           friend={friend}
           onSelectPreset={onSelectPreset}
@@ -54,44 +54,44 @@ export function AppTopbar({
         />
       </div>
 
-      {/* Right: Status Pills & Primary CTAs */}
-      <div className="flex items-center gap-2 shrink-0">
-        {/* TabPFN Operational Status */}
-        <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 px-2.5 py-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-          <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+      {/* Right Actions */}
+      <div className="flex items-center gap-2.5 shrink-0">
+        {/* Engine Ready Indicator */}
+        <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-border bg-secondary/60 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+          <span className="size-1.5 rounded-full bg-emerald-500" />
           <span>TabPFN Ready</span>
         </div>
 
-        {/* Active Friend Avatar Button */}
+        {/* Profile Avatar Pill */}
         <button
           type="button"
           onClick={onOpenProfile}
-          title={`Manage ${friend.name}'s allergy profile`}
-          className="flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/50 hover:bg-muted px-2.5 py-1.5 text-xs font-semibold transition-all hover:border-border hover:shadow-sm"
+          title={`Edit allergy rules for ${friend.name}`}
+          className="flex items-center gap-1.5 rounded-full border border-border bg-card hover:bg-secondary px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer"
         >
-          <span className="text-sm leading-none">{friend.avatar}</span>
-          <span className="hidden xl:inline text-foreground">{friend.name}</span>
+          <span className="text-sm">{friend.avatar || "👤"}</span>
+          <span className="hidden md:inline text-foreground">{friend.name}</span>
         </button>
 
-        {/* Server Card CTA */}
+        {/* Waiter Card Secondary Action */}
         <Button
           variant="outline"
           size="sm"
           onClick={onOpenWaiterCard}
-          className="h-8 gap-1.5 text-xs font-semibold border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 hover:border-rose-500/50"
+          className="h-8 gap-1.5 text-xs font-medium border-border hover:bg-secondary text-foreground"
         >
-          <ShieldAlert className="size-3.5" />
+          <ShieldAlert className="size-3.5 text-muted-foreground" />
           <span className="hidden sm:inline">Waiter Card</span>
         </Button>
 
-        {/* New Audit Action */}
+        {/* Primary New Audit Action */}
         <Button
           size="sm"
           onClick={onNewScan}
-          className="h-8 gap-1.5 text-xs font-semibold shadow-xs"
+          className="h-8 gap-1.5 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
         >
-          <Zap className="size-3.5" />
-          <span className="hidden sm:inline">New Audit</span>
+          <Plus className="size-3.5" />
+          <span>New Audit</span>
         </Button>
       </div>
     </header>

@@ -2,18 +2,8 @@
 
 import { useState } from "react";
 
-import {
-  Check,
-  Copy,
-  Heart,
-  Phone,
-  Printer,
-  ShieldAlert,
-  ShieldCheck,
-  Stethoscope,
-} from "lucide-react";
+import { Check, Copy, Phone, Printer, ShieldAlert, Stethoscope } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -79,57 +69,49 @@ export function WaiterCardModal({
   const handleCopy = () => {
     navigator.clipboard.writeText(currentText);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handlePrint = () => window.print();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden border-border/80 bg-card shadow-2xl rounded-2xl gap-0">
-        {/* Header Strip */}
-        <div className="relative bg-gradient-to-br from-rose-600 via-rose-500 to-orange-500 p-6 pb-5">
-          {/* Background texture */}
-          <div className="absolute inset-0 bg-mesh-grid opacity-20" />
-
-          <DialogHeader className="relative">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="size-10 rounded-xl bg-white/15 border border-white/25 flex items-center justify-center backdrop-blur-sm shadow-sm">
-                  <ShieldAlert className="size-5 text-white" />
+      <DialogContent className="max-w-xl p-0 overflow-hidden border-border bg-card shadow-2xl rounded-xl gap-0">
+        {/* Header */}
+        <div className="border-b border-border bg-muted/20 p-5">
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="size-8 rounded-md bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
+                  <ShieldAlert className="size-4" />
                 </div>
                 <div>
-                  <DialogTitle className="text-white font-extrabold text-lg leading-tight">
-                    Restaurant Dietary Safety Card
+                  <DialogTitle className="text-base font-semibold text-foreground">
+                    Chef & Waiter Dining Pass
                   </DialogTitle>
-                  <DialogDescription className="text-rose-100/80 text-xs mt-0.5 font-medium">
-                    Show to your waiter or kitchen staff before ordering
+                  <DialogDescription className="text-xs text-muted-foreground mt-0.5">
+                    Show to restaurant service staff to prevent cross-contamination
                   </DialogDescription>
                 </div>
               </div>
 
-              {/* Friend badge */}
-              <div className="flex items-center gap-2 bg-white/15 border border-white/25 rounded-full px-3 py-1.5 backdrop-blur-sm">
-                <span className="text-base leading-none">{friend.avatar}</span>
-                <div>
-                  <p className="text-white text-[11px] font-bold leading-tight">{friend.name}</p>
-                  <p className="text-rose-100/70 text-[9px] font-medium">{friend.relationship}</p>
-                </div>
-                <Heart className="size-3 text-white fill-white ml-0.5" />
+              <div className="flex items-center gap-2 border border-border bg-card rounded-md px-2.5 py-1 text-xs">
+                <span className="text-sm">{friend.avatar}</span>
+                <span className="font-medium text-foreground">{friend.name}</span>
               </div>
             </div>
 
-            {/* Allergen chips in header */}
-            <div className="mt-4 flex flex-wrap gap-1.5">
+            {/* Severity Tag list */}
+            <div className="mt-3 flex flex-wrap gap-1.5">
               {friend.rules
                 .filter((r) => r.severity === "severe")
                 .map((rule) => (
                   <span
                     key={rule.allergenId}
-                    className="inline-flex items-center gap-1 rounded-full bg-white/20 border border-white/30 px-2.5 py-1 text-[10px] font-bold text-white uppercase tracking-wide backdrop-blur-sm"
+                    className="inline-flex items-center gap-1 rounded bg-destructive/10 border border-destructive/20 px-2 py-0.5 text-[10px] font-medium text-destructive uppercase tracking-wide"
                   >
                     <ShieldAlert className="size-2.5" />
-                    {rule.allergenName}
+                    {rule.allergenName} (Severe)
                   </span>
                 ))}
               {friend.rules
@@ -137,7 +119,7 @@ export function WaiterCardModal({
                 .map((rule) => (
                   <span
                     key={rule.allergenId}
-                    className="inline-flex items-center gap-1 rounded-full bg-white/10 border border-white/20 px-2.5 py-1 text-[10px] font-medium text-rose-100 uppercase tracking-wide backdrop-blur-sm"
+                    className="inline-flex items-center gap-1 rounded bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400 uppercase tracking-wide"
                   >
                     {rule.allergenName}
                   </span>
@@ -150,7 +132,7 @@ export function WaiterCardModal({
         <div className="p-5 space-y-4">
           {/* Language Selector */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wide shrink-0">
+            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide shrink-0">
               Language:
             </span>
             <div className="flex gap-1 flex-wrap">
@@ -159,119 +141,74 @@ export function WaiterCardModal({
                   key={item.code}
                   type="button"
                   onClick={() => setLang(item.code)}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                  className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                     lang === item.code
-                      ? "bg-foreground text-background shadow-sm"
-                      : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/60"
+                      ? "bg-secondary text-foreground font-semibold shadow-2xs border border-border"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                   }`}
                 >
-                  <span className="text-sm">{item.flag}</span>
+                  <span className="text-xs">{item.flag}</span>
                   <span>{item.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Card Preview */}
-          <div className="rounded-xl border-2 border-rose-500/30 bg-gradient-to-br from-rose-50/80 via-white to-amber-50/40 dark:from-rose-950/25 dark:via-card dark:to-amber-950/10 p-5 shadow-inner relative overflow-hidden">
-            {/* Subtle watermark */}
-            <div className="absolute top-3 right-3 opacity-5">
-              <ShieldCheck className="size-16 text-rose-500" />
+          {/* Dining Pass Notice Box */}
+          <div className="rounded-lg border border-border bg-card p-4 space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-border text-xs">
+              <span className="font-semibold text-foreground flex items-center gap-1.5">
+                <Stethoscope className="size-3.5 text-primary" />
+                Medical Allergy Notification
+              </span>
+              <span className="text-[10px] font-mono text-muted-foreground uppercase bg-secondary px-1.5 py-0.5 rounded">
+                {activeLang?.short ?? "EN"}
+              </span>
             </div>
 
-            {/* Card header */}
-            <div className="flex items-center justify-between pb-3 mb-4 border-b border-rose-200/60 dark:border-rose-800/30">
-              <div className="flex items-center gap-2">
-                <div className="size-6 rounded-md bg-rose-500/15 flex items-center justify-center">
-                  <Stethoscope className="size-3.5 text-rose-600 dark:text-rose-400" />
-                </div>
-                <span className="font-black uppercase tracking-wide text-[11px] text-rose-600 dark:text-rose-400">
-                  Medical Allergy Notice
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Badge
-                  variant="outline"
-                  className="border-rose-400/40 text-rose-600 dark:text-rose-400 font-bold text-[9px] px-2"
-                >
-                  For {friend.name}
-                </Badge>
-                <span className="text-[9px] font-mono bg-muted border border-border rounded px-1.5 py-0.5 text-muted-foreground uppercase">
-                  {activeLang?.short ?? "EN"}
-                </span>
-              </div>
-            </div>
-
-            {/* Active dish context */}
             {currentDishName !== "this dish" && (
-              <div className="mb-3 rounded-lg bg-rose-500/8 border border-rose-500/15 px-3 py-2 flex items-center gap-2">
-                <span className="text-[10px] font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wide">
-                  Checking:
-                </span>
-                <span className="text-xs font-bold text-foreground">{currentDishName}</span>
+              <div className="rounded bg-muted/30 border border-border px-2.5 py-1.5 text-xs flex items-center gap-2">
+                <span className="text-muted-foreground text-[11px]">Audited Item:</span>
+                <span className="font-semibold text-foreground">{currentDishName}</span>
               </div>
             )}
 
-            {/* Card text */}
-            <p className="text-sm font-medium leading-relaxed text-foreground/90 whitespace-pre-line">
-              "{currentText}"
+            <p className="text-xs sm:text-sm font-normal text-foreground leading-relaxed whitespace-pre-line bg-muted/10 p-3 rounded border border-border">
+              &ldquo;{currentText}&rdquo;
             </p>
 
-            {/* Footer */}
-            <div className="mt-4 pt-3 border-t border-rose-200/50 dark:border-rose-800/25 grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Phone className="size-3 text-rose-500 shrink-0" />
+            <div className="pt-2 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Phone className="size-3 text-muted-foreground" />
                 <span>
-                  <strong className="text-foreground">{friend.emergencyContact.name}</strong>{" "}
-                  <span className="font-mono text-[10px]">{friend.emergencyContact.phone}</span>
+                  Emergency:{" "}
+                  <strong className="text-foreground">{friend.emergencyContact.name}</strong> (
+                  {friend.emergencyContact.phone})
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground justify-end">
-                <div className="size-3.5 rounded bg-primary/15 flex items-center justify-center shrink-0">
-                  <span className="text-[7px] font-black text-primary">AI</span>
-                </div>
-                <span className="italic">Validated by TabPFN Engine</span>
-              </div>
+              <span className="text-[11px] text-muted-foreground font-mono">TabPFN Verified</span>
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center justify-between gap-3 pt-1">
-            <div className="text-[10px] text-muted-foreground">
-              💡 Show on your phone screen or print and hand to kitchen staff
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePrint}
-                className="h-8 gap-1.5 text-xs font-semibold"
-              >
-                <Printer className="size-3.5" />
-                Print
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleCopy}
-                className={`h-8 gap-1.5 text-xs font-bold transition-all ${
-                  copied
-                    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                    : "bg-rose-600 hover:bg-rose-700 text-white"
-                }`}
-              >
-                {copied ? (
-                  <>
-                    <Check className="size-3.5" />
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy className="size-3.5" />
-                    Copy Text
-                  </>
-                )}
-              </Button>
-            </div>
+          {/* Action Row */}
+          <div className="flex items-center justify-end gap-2 pt-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrint}
+              className="h-8 gap-1.5 text-xs font-medium border-border"
+            >
+              <Printer className="size-3.5" />
+              Print
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleCopy}
+              className="h-8 gap-1.5 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+              {copied ? "Copied to Clipboard" : "Copy Message"}
+            </Button>
           </div>
         </div>
       </DialogContent>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { Camera, CheckCircle2, FileCode, Sparkles, UploadCloud } from "lucide-react";
+import { Camera, FileCode, Sparkles, UploadCloud } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -59,27 +59,27 @@ export function FoodDiagnosticPanel({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Segmented Control Mode Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
-        <div className="flex items-center gap-1 rounded-lg border border-border/80 bg-muted/40 p-1">
+    <div className="flex flex-col gap-5">
+      {/* Mode Switcher Tabs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border">
+        <div className="flex items-center gap-1 rounded-lg border border-border bg-secondary/60 p-1 self-start">
           <button
             type="button"
             onClick={() => setInputMode("presets")}
-            className={`rounded-md px-3 py-1 text-xs font-semibold transition-all ${
+            className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
               inputMode === "presets"
-                ? "bg-card text-foreground shadow-xs"
+                ? "bg-card text-foreground shadow-2xs font-semibold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Curated Menu Dishes ({SAMPLE_FOOD_DATABASE.length})
+            Curated Menu Items ({SAMPLE_FOOD_DATABASE.length})
           </button>
           <button
             type="button"
             onClick={() => setInputMode("editor")}
-            className={`rounded-md px-3 py-1 text-xs font-semibold transition-all ${
+            className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
               inputMode === "editor"
-                ? "bg-card text-foreground shadow-xs"
+                ? "bg-card text-foreground shadow-2xs font-semibold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -88,9 +88,9 @@ export function FoodDiagnosticPanel({
           <button
             type="button"
             onClick={() => setInputMode("camera")}
-            className={`rounded-md px-3 py-1 text-xs font-semibold transition-all ${
+            className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
               inputMode === "camera"
-                ? "bg-card text-foreground shadow-xs"
+                ? "bg-card text-foreground shadow-2xs font-semibold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -101,7 +101,8 @@ export function FoodDiagnosticPanel({
         <div className="text-xs text-muted-foreground flex items-center gap-1.5">
           <span className="size-2 rounded-full bg-emerald-500" />
           <span>
-            Active Patient: <strong>{friend.name}</strong> (Celiac & Peanuts)
+            Active Patient: <strong className="text-foreground">{friend.name}</strong> (Celiac &
+            Peanuts)
           </span>
         </div>
       </div>
@@ -119,58 +120,59 @@ export function FoodDiagnosticPanel({
                 type="button"
                 key={item.id}
                 onClick={() => handlePresetClick(item)}
-                className={`group relative overflow-hidden rounded-xl border text-left cursor-pointer transition-all duration-200 flex flex-col justify-between ${
+                className={`group relative overflow-hidden rounded-lg border text-left cursor-pointer transition-all duration-150 flex flex-col justify-between ${
                   isSelected
-                    ? "border-primary ring-2 ring-primary/20 shadow-md bg-card"
-                    : "border-border/70 bg-card/60 hover:border-border hover:bg-card hover:shadow-xs"
+                    ? "border-primary bg-card shadow-xs ring-1 ring-primary/30"
+                    : "border-border bg-card/60 hover:border-border hover:bg-card hover:shadow-2xs"
                 }`}
               >
                 {/* Photo Header */}
-                <div className="relative h-32 w-full overflow-hidden bg-muted">
+                <div className="relative h-28 w-full overflow-hidden bg-muted">
                   <Image
                     src={item.image}
                     alt={item.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-102"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
 
                   {/* Verdict Badge */}
-                  <div className="absolute top-2.5 right-2.5">
+                  <div className="absolute top-2 right-2">
                     <span
-                      className={`inline-flex items-center rounded-md px-2 py-0.5 text-[9px] font-black uppercase tracking-wider backdrop-blur-md ${
+                      className={`inline-flex items-center rounded px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider backdrop-blur-md ${
                         isDangerous
-                          ? "bg-rose-600 text-white shadow-xs"
+                          ? "bg-destructive text-destructive-foreground shadow-2xs"
                           : isCaution
-                            ? "bg-amber-500 text-white shadow-xs"
-                            : "bg-emerald-600 text-white shadow-xs"
+                            ? "bg-amber-500 text-white shadow-2xs"
+                            : "bg-emerald-600 text-white shadow-2xs"
                       }`}
                     >
                       {item.expectedVerdictForAlex}
                     </span>
                   </div>
 
-                  <div className="absolute bottom-2 left-2.5 text-[10px] font-semibold text-white/90 drop-shadow-xs">
-                    {item.cuisine} • {item.prepTime}
+                  <div className="absolute bottom-2 left-2.5 text-[10px] font-medium text-white/95 drop-shadow-xs">
+                    {item.cuisine} · {item.prepTime}
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-3 space-y-1.5 flex-1 flex flex-col justify-between">
+                <div className="p-3 space-y-2 flex-1 flex flex-col justify-between">
                   <div>
-                    <h4 className="font-bold text-xs text-foreground line-clamp-1 group-hover:text-primary transition-colors">
+                    <h3 className="font-semibold text-xs text-foreground line-clamp-1 group-hover:text-primary transition-colors">
                       {item.name}
-                    </h4>
+                    </h3>
                     <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5 leading-snug">
                       {item.description}
                     </p>
                   </div>
 
-                  <div className="pt-2 border-t border-border/40 flex flex-wrap gap-1">
+                  <div className="pt-2 border-t border-border/60 flex flex-wrap gap-1">
                     {item.riskHighlights.map((hl) => (
                       <span
                         key={hl}
-                        className="rounded px-1.5 py-0.2 text-[9px] font-medium bg-muted text-muted-foreground"
+                        className="rounded px-1.5 py-0.2 text-[9px] font-medium bg-secondary text-muted-foreground"
                       >
                         {hl}
                       </span>
@@ -185,30 +187,31 @@ export function FoodDiagnosticPanel({
 
       {/* Camera / OCR Simulator Mode */}
       {inputMode === "camera" && (
-        <Card className="border-border/80 bg-card/60 shadow-xs">
-          <CardHeader className="pb-3 border-b border-border/60">
-            <CardTitle className="text-sm font-bold flex items-center gap-2">
+        <Card className="border-border bg-card shadow-2xs">
+          <CardHeader className="p-4 pb-2 border-b border-border">
+            <CardTitle className="text-xs font-semibold text-foreground flex items-center gap-2">
               <Camera className="size-4 text-primary" />
               Optical Food Label Scanner Simulator
             </CardTitle>
-            <CardDescription className="text-xs">
+            <CardDescription className="text-xs text-muted-foreground">
               Simulates edge camera scanning of packaging nutrition panels and ingredients lists.
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-4 space-y-4">
-            <div className="rounded-xl border-2 border-dashed border-border p-8 text-center space-y-3 bg-muted/20">
-              <div className="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-                <UploadCloud className="size-5" />
+          <CardContent className="p-5 space-y-4">
+            <div className="rounded-lg border border-dashed border-border p-6 text-center space-y-2.5 bg-muted/10">
+              <div className="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+                <UploadCloud className="size-4.5" />
               </div>
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-foreground">
-                  Snap a photo of ingredient label
+              <div className="space-y-0.5">
+                <p className="text-xs font-medium text-foreground">
+                  Simulate scanning an ingredient label
                 </p>
                 <p className="text-[11px] text-muted-foreground">
-                  Open-source OCR extracts text locally without uploading images to cloud servers.
+                  Text is extracted locally and vectorized without uploading images to cloud
+                  servers.
                 </p>
               </div>
-              <div className="flex justify-center gap-2 pt-2">
+              <div className="flex justify-center gap-2 pt-1">
                 <Button
                   size="sm"
                   variant="outline"
@@ -219,7 +222,7 @@ export function FoodDiagnosticPanel({
                     );
                     setInputMode("editor");
                   }}
-                  className="text-xs h-8"
+                  className="text-xs h-8 border-border"
                 >
                   Load Granola Label Sample
                 </Button>
@@ -233,7 +236,7 @@ export function FoodDiagnosticPanel({
                     );
                     setInputMode("editor");
                   }}
-                  className="text-xs h-8"
+                  className="text-xs h-8 border-border"
                 >
                   Load Bakery Bread Sample
                 </Button>
@@ -244,16 +247,16 @@ export function FoodDiagnosticPanel({
       )}
 
       {/* Editor & Execution Panel */}
-      <Card className="border-border/80 bg-card shadow-xs">
-        <CardHeader className="pb-3 border-b border-border/60">
+      <Card className="border-border bg-card shadow-2xs">
+        <CardHeader className="p-4 pb-3 border-b border-border">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <CardTitle className="text-xs font-semibold text-foreground flex items-center gap-2">
                 <FileCode className="size-4 text-primary" />
-                Active Ingredient Vector Feed
+                Active Ingredient Vector Stream
               </CardTitle>
-              <CardDescription className="text-xs">
-                Inspect raw ingredient strings parsed into TabPFN tabular tokens
+              <CardDescription className="text-xs text-muted-foreground">
+                Raw culinary ingredient statement parsed into TabPFN tabular tokens
               </CardDescription>
             </div>
 
@@ -266,25 +269,25 @@ export function FoodDiagnosticPanel({
         <CardContent className="p-4 sm:p-5 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="space-y-1">
-              <label htmlFor="dish-name-input" className="text-xs font-bold text-foreground">
-                Dish / Product Title:
+              <label htmlFor="dish-name-input" className="text-xs font-medium text-foreground">
+                Dish or Product Name:
               </label>
               <input
                 id="dish-name-input"
                 type="text"
                 value={foodName}
                 onChange={(e) => setFoodName(e.target.value)}
-                className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
 
             <div className="md:col-span-2 space-y-1">
               <label
                 htmlFor="ingredients-textarea"
-                className="text-xs font-bold text-foreground flex items-center justify-between"
+                className="text-xs font-medium text-foreground flex items-center justify-between"
               >
-                <span>Raw Ingredients Statement:</span>
-                <span className="text-[10px] font-normal text-muted-foreground">
+                <span>Raw Ingredients:</span>
+                <span className="text-[10px] text-muted-foreground font-normal">
                   Comma or line delimited
                 </span>
               </label>
@@ -293,26 +296,26 @@ export function FoodDiagnosticPanel({
                 rows={2}
                 value={rawText}
                 onChange={(e) => setRawText(e.target.value)}
-                className="w-full rounded-lg border border-border bg-background p-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-y"
+                className="w-full rounded-md border border-border bg-background p-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-y"
               />
             </div>
           </div>
 
           {/* Action Row */}
-          <div className="pt-2 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="pt-2 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
             <span className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-              <CheckCircle2 className="size-3.5 text-emerald-500" />
-              TabPFN In-Context attention matrix active
+              <span className="size-1.5 rounded-full bg-emerald-500" />
+              TabPFN In-Context tabular prior ready
             </span>
 
             <Button
               size="sm"
               onClick={handleExecuteAudit}
               disabled={isAuditing || !foodName.trim() || !rawText.trim()}
-              className="w-full sm:w-auto h-8 px-5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold gap-1.5 text-xs rounded-lg shadow-xs"
+              className="w-full sm:w-auto h-8 px-4 bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-xs rounded-md shadow-xs gap-1.5"
             >
               <Sparkles className="size-3.5" />
-              {isAuditing ? "TabPFN Computing..." : "Run TabPFN Diagnostic"}
+              {isAuditing ? "Evaluating Vectors..." : "Run TabPFN Diagnostic"}
             </Button>
           </div>
         </CardContent>

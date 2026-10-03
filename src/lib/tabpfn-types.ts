@@ -55,6 +55,8 @@ export interface TabPFNPrediction {
   crossContaminationProb: number; // 0 - 100%
   anomalyScore: number; // 0.0 - 1.0 (TabPFN anomaly detection)
   isAnomaly: boolean;
+  concentrationPct: number;
+  processingLevel: number;
   matchedAllergen?: string;
   explanation: string;
   recommendation: string;

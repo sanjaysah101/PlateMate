@@ -395,6 +395,8 @@ export function auditFoodWithTabPFN(
       crossContaminationProb: prediction.crossContaminationProb,
       anomalyScore: prediction.anomalyScore,
       isAnomaly: prediction.isAnomaly,
+      concentrationPct: feature.concentrationPct,
+      processingLevel: feature.processingLevel,
       matchedAllergen,
       explanation,
       recommendation,
